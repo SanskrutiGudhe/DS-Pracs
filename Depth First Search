@@ -1,0 +1,88 @@
+#include <iostream> 
+using namespace std; 
+ 
+#define MAX_PAGES 6 
+ 
+int webGraph[MAX_PAGES][MAX_PAGES]; 
+bool visited[MAX_PAGES]; 
+ 
+int stack_arr[MAX_PAGES]; 
+int stack_top = -1; 
+ 
+bool stack_isEmpty() { 
+    return stack_top == -1; 
+} 
+ 
+bool stack_isFull() { 
+    return stack_top == MAX_PAGES - 1; 
+} 
+ 
+void stack_push(int page) { 
+    if (!stack_isFull()) { 
+        stack_arr[++stack_top] = page; 
+    } 
+} 
+ 
+int stack_pop() { 
+    if (!stack_isEmpty()) { 
+        return stack_arr[stack_top--]; 
+    } 
+    return -1; 
+} 
+ 
+void initializeGraph() { 
+    for (int i = 0; i < MAX_PAGES; ++i) { 
+        visited[i] = false; 
+        for (int j = 0; j < MAX_PAGES; ++j) { 
+            webGraph[i][j] = 0; 
+        } 
+    } 
+} 
+ 
+void addLink(int fromPage, int toPage) { 
+    webGraph[fromPage][toPage] = 1; 
+} 
+ 
+void dfs_crawl(int startPage) { 
+    stack_push(startPage); 
+ 
+    cout << "DFS Crawl Order:" << endl; 
+ 
+    while (!stack_isEmpty()) { 
+         
+        int currentPage = stack_pop(); 
+ 
+        if (!visited[currentPage]) { 
+             
+            visited[currentPage] = true; 
+             
+            cout << "Indexing page: " << currentPage << endl; 
+ 
+            for (int neighbor = MAX_PAGES - 1; neighbor >= 0; --neighbor) { 
+                 
+                if (webGraph[currentPage][neighbor] == 1 && !visited[neighbor]) { 
+                     
+                    stack_push(neighbor); 
+                } 
+            } 
+        } 
+    } 
+} 
+ 
+int main() { 
+    initializeGraph(); 
+ 
+    addLink(0, 1); 
+    addLink(0, 2); 
+     
+    addLink(1, 3); 
+    addLink(1, 4); 
+     
+    addLink(2, 5); 
+     
+    addLink(4, 0); 
+ 
+    dfs_crawl(0); 
+ 
+    return 0; 
+} 

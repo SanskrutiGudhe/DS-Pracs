@@ -1,0 +1,69 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+class ParanthesisChecker {
+public:
+    char ch;
+    char stack[100];
+    int top = -1;
+
+    void get_data() {
+        cout << "Enter a character: ";
+        cin >> ch;
+    }
+
+    void put_data() {
+        if (ch == '(' || ch == '[' || ch == '{') {
+            push(ch);
+        }
+
+        else if ((top_element() == '(' && ch == ')') ||
+                 (top_element() == '[' && ch == ']') ||
+                 (top_element() == '{' && ch == '}')) {
+            pop();
+        }
+
+        if (is_empty()) {
+            cout << "Well parenthesized";
+        }
+        else {
+            cout << "Not well parenthesized";
+        }
+    }
+
+private:
+    void push(char c) {
+        if (top >= 99) {
+            cout << "Stack Overflow\n";
+            return;
+        }
+        stack[++top] = c;
+    }
+
+    void pop() {
+        if (top == -1) {
+            cout << "Stack Underflow\n";
+            return;
+        }
+        top--;
+    }
+
+    char top_element() {
+        if (top == -1) return '\0';
+        return stack[top];
+    }
+
+    bool is_empty() {
+        return top == -1;
+    }
+};
+
+int main() {
+    ParanthesisChecker s;
+
+    s.get_data();
+    s.put_data();
+
+    return 0;
+}
